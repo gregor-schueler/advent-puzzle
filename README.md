@@ -1,4 +1,10 @@
-# Advent Puzzle Solver
+<div align="center">
+  <a href="https://advent-puzzle.streamlit.app/">
+    <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Streamlit App" width="250">
+  </a>
+</div>
+
+## Advent Puzzle Solver
 
 Brute-force solver and terminal visualizer for a custom 4×6 Advent calendar puzzle. The board has 24 cells (4 columns × 6 rows). You remove exactly one target cell (representing a given day), then tile the remaining 23 cells with six one-sided polyomino pieces:
 
