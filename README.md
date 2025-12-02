@@ -22,7 +22,7 @@ Each piece is available **once**, but can be rotated in 90° increments (no flip
 `solver.py` turns the tiling task into a constrained search:
 
 1. **Define canonical rotations** – For every piece we build all unique right-angle rotations by normalizing each rotated shape to an origin-based coordinate system.
-2. **Enumerate placements** – We slide every rotated piece across the 4×6 grid, producing placements that stay within bounds and do not cover the target cell. Each placement records the piece name and the four covered cell indices.
+2. **Enumerate placements** – We slide every rotated piece across the 4×6 grid, producing placements that stay within bounds and do not cover the target cell. Each placement records the piece name and the four or three covered cell indices.
 3. **Exact-cover search** – A recursive backtracking function chooses the uncovered cell with the fewest legal placements (most-constrained heuristic). It tries each placement whose piece is still unused and whose cells are currently free, marking cells/piece usage before recursing. When all non-target cells are filled and each piece was used exactly once, we record the placement list as a valid solution.
 4. **Visualization** – Every solution is printed as a colored grid using ANSI escape codes. Occupied cells show a colored `■` (ASCII 254) tied to their piece letter, while the removed day renders as `X`.
 
@@ -45,7 +45,6 @@ The solver explores the complete search tree, so it prints every tiling for the 
 | `render_solutions(...)` | Prints the number of solutions and renders each board using colored `■` blocks plus an `X` for the missing day. |
 | `main()` | Parses CLI arguments, runs `solve`, and displays the solutions.
 
-Cells are stored as integers (`y * WIDTH + x`), so accessing the grid requires only slicing and slicing the linear list.
 
 ## Running the Solver
 
