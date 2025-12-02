@@ -63,6 +63,39 @@ st.markdown(
             border-radius: 12px;
             max-width: 360px;
         }
+        .st-key-target-grid {
+            max-width: 360px;
+            margin: 0 auto;
+        }
+        .st-key-target-grid [data-testid="stHorizontalBlock"] {
+            display: flex;
+            flex-wrap: nowrap !important;
+            gap: 0.05rem !important;
+            justify-content: center;
+        }
+        .st-key-target-grid [data-testid="column"] {
+            flex: 0 0 calc(25% - 0.35rem) !important;
+            min-width: calc(25% - 0.35rem) !important;
+        }
+        .st-key-target-grid [data-testid="stButton"] > button {
+            max-width: 60px;
+        }
+        @media (max-width: 640px) {
+            .st-key-target-grid {
+                max-width: 280px;
+            }
+            .st-key-target-grid [data-testid="stButton"] > button {
+                height: 44px;
+                font-size: 16px;
+            }
+            .st-key-target-grid [data-testid="stHorizontalBlock"] {
+                gap: 0.01rem !important;
+            }
+            .st-key-target-grid [data-testid="column"] {
+                flex: 0 0 calc(25% - 0.25rem) !important;
+                min-width: calc(25% - 0.25rem) !important;
+            }
+        }
         div[data-testid="stButton"] > button {
             border-radius: 12px;
             border: 1px solid #d1d5db;
@@ -106,7 +139,8 @@ PIECE_COLORS_HTML = {
 st.markdown(
     """
     <div class="hero">
-        <h1>🎄 4x6 Advent Puzzle Solver</h1>
+        <h2>🎄 🎄 🎄 🎄</h2>
+        <h1>4x6 Advent Puzzle Solver</h1>
         <p>Welcome to the <strong>4x6 Advent Puzzle</strong>!</p>
         <p><strong>Goal:</strong> Place all six unique pieces without overlap so that only your chosen target square remains open.</p>
         <ul>
@@ -121,13 +155,13 @@ st.markdown(
 # ----------------------
 # Decorative piece shapes at top
 # ----------------------
-st.markdown("<h3 class='section-title'>🎨 Puzzle Pieces</h3>", unsafe_allow_html=True)
+st.markdown("<h3 class='section-title'>Puzzle Pieces</h3>", unsafe_allow_html=True)
 piece_html = "<div class='piece-strip'>"
 for name, blocks in PIECE_BASES.items():
     # Render piece as mini-grid
     max_x = max(x for x, _ in blocks)
     max_y = max(y for _, y in blocks)
-    cell_size = 20
+    cell_size = 15
     piece_html += (
         f"<div class='piece-grid' style='grid-template-columns: repeat({max_x+1}, {cell_size}px);"
         f" grid-template-rows: repeat({max_y+1}, {cell_size}px);'>"
@@ -151,15 +185,6 @@ st.markdown("<h3 class='section-title'>Select the Target Cell</h3>", unsafe_allo
 if "target" not in st.session_state:
     st.session_state["target"] = None
 
-st.markdown(
-    """
-    <div class="target-wrapper">
-        <p>Minimal grid, maximal clarity – the selected square turns bold immediately.</p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
 
 def set_target(cell_idx: int) -> None:
     """Update the selected target cell and rerun to refresh the grid immediately."""
@@ -167,8 +192,8 @@ def set_target(cell_idx: int) -> None:
     # Buttons already trigger a rerun after callbacks; no explicit rerun needed.
 
 
-grid_shell = st.columns([1, 4, 1])
-with grid_shell[1]:
+grid_container = st.container(key="target-grid")
+with grid_container:
     for y in range(HEIGHT):
         row = st.columns(WIDTH, gap="small")
         for x in range(WIDTH):
@@ -203,8 +228,7 @@ st.markdown("---")
 with st.spinner("Solving..."):
     placements, solutions = solve(target)
 
-st.markdown(f"### 🔎 Found {len(solutions)} solution(s)")
-
+st.markdown(f"<h3 class='section-title'>Found {len(solutions)} solution(s)</h3>", unsafe_allow_html=True)
 # ----------------------
 # Render each solution centered, no gridlines
 # ----------------------
