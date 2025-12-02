@@ -64,36 +64,35 @@ st.markdown(
             max-width: 360px;
         }
         .st-key-target-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 0.35rem;
             max-width: 360px;
             margin: 0 auto;
         }
-        .st-key-target-grid [data-testid="stHorizontalBlock"] {
-            display: flex;
-            flex-wrap: nowrap !important;
-            gap: 0.05rem !important;
-            justify-content: center;
+        .st-key-target-grid > div[data-testid="stVerticalBlock"] {
+            margin: 0 !important;
         }
-        .st-key-target-grid [data-testid="column"] {
-            flex: 0 0 calc(25% - 0.35rem) !important;
-            min-width: calc(25% - 0.35rem) !important;
+        .st-key-target-grid > div[data-testid="stVerticalBlock"] > div[data-testid="element-container"] {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .st-key-target-grid [data-testid="stButton"] {
+            width: 100%;
         }
         .st-key-target-grid [data-testid="stButton"] > button {
-            max-width: 60px;
+            width: 100%;
+            height: 52px;
+            max-width: none;
         }
         @media (max-width: 640px) {
             .st-key-target-grid {
-                max-width: 280px;
+                max-width: 100%;
+                gap: 0.2rem;
             }
             .st-key-target-grid [data-testid="stButton"] > button {
-                height: 44px;
-                font-size: 16px;
-            }
-            .st-key-target-grid [data-testid="stHorizontalBlock"] {
-                gap: 0.01rem !important;
-            }
-            .st-key-target-grid [data-testid="column"] {
-                flex: 0 0 calc(25% - 0.25rem) !important;
-                min-width: calc(25% - 0.25rem) !important;
+                height: 38px;
+                font-size: 15px;
             }
         }
         div[data-testid="stButton"] > button {
@@ -194,20 +193,17 @@ def set_target(cell_idx: int) -> None:
 
 grid_container = st.container(key="target-grid")
 with grid_container:
-    for y in range(HEIGHT):
-        row = st.columns(WIDTH, gap="small")
-        for x in range(WIDTH):
-            cell_idx = y * WIDTH + x
-            is_selected = st.session_state["target"] == cell_idx
-            label = "X" if is_selected else ""
-            row[x].button(
-                label,
-                key=f"cell_{cell_idx}",
-                use_container_width=True,
-                on_click=set_target,
-                args=(cell_idx,),
-                type="primary" if is_selected else "secondary",
-            )
+    for cell_idx in range(WIDTH * HEIGHT):
+        is_selected = st.session_state["target"] == cell_idx
+        label = "X" if is_selected else ""
+        st.button(
+            label,
+            key=f"cell_{cell_idx}",
+            use_container_width=True,
+            on_click=set_target,
+            args=(cell_idx,),
+            type="primary" if is_selected else "secondary",
+        )
 
 target = st.session_state["target"]
 
